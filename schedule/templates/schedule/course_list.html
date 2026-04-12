@@ -1,0 +1,14 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Список курсов{% endblock %}
+
+{% block content %}
+    <h2>Список курсов</h2>
+    <ul>
+        {% for course in courses %}
+            <li>{{ course.name }} ({{ course.code }}) — {{ course.teacher|default:"— без преподавателя" }}</li>
+        {% empty %}
+            <li>Курсов пока нет.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

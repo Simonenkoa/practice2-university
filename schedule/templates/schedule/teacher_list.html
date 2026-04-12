@@ -1,0 +1,26 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Список преподавателей{% endblock %}
+
+{% block content %}
+    <h2>Список преподавателей</h2>
+    <section>
+        {% if teachers %}
+            {% for teacher in teachers %}
+                <article>
+                    <h3>{{ teacher.first_name }} {{ teacher.last_name }}</h3>
+                    <p><strong>Email:</strong> {{ teacher.email }}</p>
+                    <p><strong>Курсы:</strong> 
+                        {% if teacher.courses.all %}
+                            {% for course in teacher.courses.all %}{{ course.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
+                        {% else %}
+                            нет
+                        {% endif %}
+                    </p>
+                </article>
+            {% endfor %}
+        {% else %}
+            <p>Преподавателей пока нет.</p>
+        {% endif %}
+    </section>
+{% endblock %}

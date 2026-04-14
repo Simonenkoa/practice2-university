@@ -50,3 +50,24 @@ class TeacherForm(forms.ModelForm):
         if salary and salary > 500000:
             raise ValidationError("Зарплата не может быть больше 500000")
         return salary
+
+# Простая форма для курса (чтобы не ломать навигацию)
+class CourseForm(forms.Form):
+    name = forms.CharField(
+        label="Название курса",
+        widget=forms.TextInput(attrs={'placeholder': 'Python для начинающих'})
+    )
+    code = forms.CharField(
+        label="Код курса",
+        widget=forms.TextInput(attrs={'placeholder': 'PY101'})
+    )
+    description = forms.CharField(
+        label="Описание",
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 3})
+    )
+    credits = forms.IntegerField(
+        label="Кредиты",
+        initial=3,
+        widget=forms.NumberInput()
+    )

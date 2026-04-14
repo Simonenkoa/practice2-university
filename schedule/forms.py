@@ -1,47 +1,52 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from .models import Teacher
 
-class TeacherForm(forms.Form):
-    first_name = forms.CharField(
-        label="Имя",
-        help_text="Введите имя преподавателя",
-        widget=forms.TextInput(attrs={'placeholder': 'Иван'})
-    )
-    last_name = forms.CharField(
-        label="Фамилия",
-        help_text="Введите фамилию преподавателя",
-        widget=forms.TextInput(attrs={'placeholder': 'Иванов'})
-    )
-    email = forms.EmailField(
-        label="Email",
-        help_text="Введите рабочий email",
-        widget=forms.EmailInput(attrs={'placeholder': 'ivanov@university.ru'})
-    )
-    department = forms.CharField(          # это поле сделаем необязательным
-        label="Кафедра",
-        required=False,
-        help_text="Кафедра (необязательно)",
-        widget=forms.TextInput(attrs={'placeholder': 'Информатика'})
-    )
+# Кастомные валидаторы (3 штуки)
+def validate_name_length(value):
+    if len(value) < 2:
+        raise ValidationError("Имя/фамилия должна быть минимум 2 символа")
 
-class CourseForm(forms.Form):
-    name = forms.CharField(
-        label="Название курса",
-        help_text="Введите полное название курса",
-        widget=forms.TextInput(attrs={'placeholder': 'Python для начинающих'})
-    )
-    code = forms.CharField(
-        label="Код курса",
-        help_text="Уникальный код (например PY101)",
-        widget=forms.TextInput(attrs={'placeholder': 'PY101'})
-    )
-    description = forms.CharField(
-        label="Описание",
-        required=False,                    # необязательное поле
-        widget=forms.Textarea(attrs={'placeholder': 'Краткое описание курса...', 'rows': 3})
-    )
-    credits = forms.IntegerField(
-        label="Кредиты",
-        initial=3,
-        help_text="Количество кредитов",
-        widget=forms.NumberInput(attrs={'placeholder': '3'})
-    )
+def validate_phone(value):
+    if value and not value.startswith('+7'):
+        raise ValidationError("Телефон должен начинаться с +7")
+
+def validate_salary(value):
+    if value and value < 10000:
+        raise ValidationError("Зарплата не может быть меньше 10000")
+
+class TeacherForm(forms.ModelForm):
+    class Meta:
+        model = Teacher
+        fields = ['first_name', 'last_name', 'email', 'department', 'birth_date', 'phone', 'salary']
+
+    # 3 метода clean_ для полей
+    def clean_first_name(self):
+        data = self.cleaned_data['first_name']
+        validate_name_length(data)
+        return data
+
+    def clean_last_name(self):
+        data = self.cleaned_data['last_name']
+        validate_name_length(data)
+        return data
+
+    def clean_phone(self):
+        data = self.cleaned_data.get('phone')
+        if data:
+            validate_phone(data)
+        return data
+
+    # 2 метода clean() для формы
+    def clean(self):
+        cleaned_data = super().clean()
+        salary = cleaned_data.get('salary')
+        if salary:
+            validate_salary(salary)
+        return cleaned_data
+
+    def clean_salary(self):
+        salary = self.cleaned_data.get('salary')
+        if salary and salary > 500000:
+            raise ValidationError("Зарплата не может быть больше 500000")
+        return salary

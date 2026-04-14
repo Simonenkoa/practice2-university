@@ -9,12 +9,7 @@ def add_teacher(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
         if form.is_valid():
-            Teacher.objects.create(
-                first_name=form.cleaned_data['first_name'],
-                last_name=form.cleaned_data['last_name'],
-                email=form.cleaned_data['email'],
-                department=form.cleaned_data['department']
-            )
+            form.save()          # ModelForm сам сохраняет в модель
             return redirect('teacher_list')
     else:
         form = TeacherForm()

@@ -10,6 +10,8 @@ class Teacher(models.Model):
     birth_date = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
     phone = models.CharField(max_length=20, unique=True, blank=True, verbose_name="Телефон")  # уникальный
     salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Зарплата")
+    degree = models.CharField(max_length=100, blank=True, verbose_name="Учёная степень")
+    is_active = models.BooleanField(default=True, verbose_name="Активен")
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

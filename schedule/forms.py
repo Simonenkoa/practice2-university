@@ -18,7 +18,7 @@ def validate_salary(value):
 class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['first_name', 'last_name', 'email', 'department', 'birth_date', 'phone', 'salary']
+        fields = ['first_name', 'last_name', 'email', 'department', 'birth_date', 'phone', 'salary', 'degree', 'is_active']
 
     # 3 метода clean_ для полей
     def clean_first_name(self):

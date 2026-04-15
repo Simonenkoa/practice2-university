@@ -8,7 +8,7 @@ class Teacher(models.Model):
     hire_date = models.DateField(null=True, blank=True, verbose_name="Дата найма")
 
     birth_date = models.DateField(null=True, blank=True, verbose_name="Дата рождения")
-    phone = models.CharField(max_length=20, unique=True, blank=True, verbose_name="Телефон")  # уникальный
+    phone = models.CharField(max_length=20, unique=True, blank=True, verbose_name="Телефон")
     salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, verbose_name="Зарплата")
     degree = models.CharField(max_length=100, blank=True, verbose_name="Учёная степень")
     is_active = models.BooleanField(default=True, verbose_name="Активен")

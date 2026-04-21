@@ -8,7 +8,7 @@ def redirect_to_admin(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', redirect_to_admin),                    # главная → админка (как было до 3 лабы)
+    path('', redirect_to_admin),
     path('teachers/', teacher_list, name='teacher_list'),
     path('courses/', course_list, name='course_list'),
     path('add-teacher/', add_teacher, name='add_teacher'),

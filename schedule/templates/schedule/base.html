@@ -2,13 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Университет{% endblock %}</title>
+    <title>{% block title %}Учебное расписание{% endblock %}</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background: #007bff; color: white; padding: 15px; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; }
+        header { background: #007bff; color: white; padding: 15px; text-align: center; }
+        nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 18px; }
+        nav a:hover { text-decoration: underline; }
         main { padding: 20px; }
-        footer { background: #333; color: white; text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%; }
+        footer { background: #333; color: white; text-align: center; padding: 10px; margin-top: 30px; }
     </style>
 </head>
 <body>
@@ -17,8 +18,8 @@
         <nav>
             <a href="{% url 'teacher_list' %}">Список преподавателей</a>
             <a href="{% url 'course_list' %}">Список курсов</a>
-            <a href="{% url 'add_teacher' %}">Добавить преподавателя</a>
-            <a href="{% url 'add_course' %}">Добавить курс</a>
+            <a href="{% url 'student_list' %}">Список студентов</a>
+            <a href="{% url 'orm_page' %}">ORM-запросы</a>
         </nav>
     </header>
 
@@ -28,7 +29,7 @@
     </main>
 
     <footer>
-        &copy; 2026 Университет
+        &copy; 2026 Практическая работа 2
     </footer>
 </body>
 </html>

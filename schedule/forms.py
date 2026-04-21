@@ -1,73 +1,17 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from .models import Teacher
-
-# Кастомные валидаторы (3 штуки)
-def validate_name_length(value):
-    if len(value) < 2:
-        raise ValidationError("Имя/фамилия должна быть минимум 2 символа")
-
-def validate_phone(value):
-    if value and not value.startswith('+7'):
-        raise ValidationError("Телефон должен начинаться с +7")
-
-def validate_salary(value):
-    if value and value < 10000:
-        raise ValidationError("Зарплата не может быть меньше 10000")
+from .models import Teacher, Course, Student
 
 class TeacherForm(forms.ModelForm):
     class Meta:
         model = Teacher
-        fields = ['first_name', 'last_name', 'email', 'department', 'birth_date', 'phone', 'salary', 'degree', 'is_active']
+        fields = ['first_name', 'last_name', 'email', 'department']
 
-    # 3 метода clean_ для полей
-    def clean_first_name(self):
-        data = self.cleaned_data['first_name']
-        validate_name_length(data)
-        return data
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = ['name', 'code', 'teacher', 'credits']
 
-    def clean_last_name(self):
-        data = self.cleaned_data['last_name']
-        validate_name_length(data)
-        return data
-
-    def clean_phone(self):
-        data = self.cleaned_data.get('phone')
-        if data:
-            validate_phone(data)
-        return data
-
-    # 2 метода clean() для формы
-    def clean(self):
-        cleaned_data = super().clean()
-        salary = cleaned_data.get('salary')
-        if salary:
-            validate_salary(salary)
-        return cleaned_data
-
-    def clean_salary(self):
-        salary = self.cleaned_data.get('salary')
-        if salary and salary > 500000:
-            raise ValidationError("Зарплата не может быть больше 500000")
-        return salary
-
-# Простая форма для курса (чтобы не ломать навигацию)
-class CourseForm(forms.Form):
-    name = forms.CharField(
-        label="Название курса",
-        widget=forms.TextInput(attrs={'placeholder': 'Python для начинающих'})
-    )
-    code = forms.CharField(
-        label="Код курса",
-        widget=forms.TextInput(attrs={'placeholder': 'PY101'})
-    )
-    description = forms.CharField(
-        label="Описание",
-        required=False,
-        widget=forms.Textarea(attrs={'rows': 3})
-    )
-    credits = forms.IntegerField(
-        label="Кредиты",
-        initial=3,
-        widget=forms.NumberInput()
-    )
+class StudentForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ['first_name', 'last_name', 'email', 'student_id']

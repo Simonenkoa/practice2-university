@@ -1,35 +1,84 @@
-from django.shortcuts import render, redirect
-from .models import Teacher, Course
-from .forms import TeacherForm, CourseForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.db.models import Count
+from .models import Teacher, Course, Student
+from .forms import TeacherForm, CourseForm, StudentForm
+
+# ====================== TEACHER ======================
 def teacher_list(request):
     teachers = Teacher.objects.all()
     return render(request, 'schedule/teacher_list.html', {'teachers': teachers})
 
-def add_teacher(request):
+def teacher_create(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
         if form.is_valid():
-            form.save()          # ModelForm сам сохраняет в модель
+            form.save()
             return redirect('teacher_list')
     else:
         form = TeacherForm()
-    return render(request, 'schedule/add_teacher.html', {'form': form})
+    return render(request, 'schedule/teacher_form.html', {'form': form, 'title': 'Добавить преподавателя'})
 
+def teacher_update(request, pk):
+    teacher = get_object_or_404(Teacher, pk=pk)
+    if request.method == 'POST':
+        form = TeacherForm(request.POST, instance=teacher)
+        if form.is_valid():
+            form.save()
+            return redirect('teacher_list')
+    else:
+        form = TeacherForm(instance=teacher)
+    return render(request, 'schedule/teacher_form.html', {'form': form, 'title': 'Редактировать преподавателя'})
+
+def teacher_delete(request, pk):
+    teacher = get_object_or_404(Teacher, pk=pk)
+    if request.method == 'POST':
+        teacher.delete()
+        return redirect('teacher_list')
+    return render(request, 'schedule/teacher_confirm_delete.html', {'object': teacher, 'type': 'преподавателя'})
+
+# ====================== COURSE ======================
 def course_list(request):
+    teachers = Teacher.objects.all()
+    selected_teacher = request.GET.get('teacher')
     courses = Course.objects.all()
-    return render(request, 'schedule/course_list.html', {'courses': courses})
+    if selected_teacher:
+        courses = courses.filter(teacher_id=selected_teacher)
+    return render(request, 'schedule/course_list.html', {
+        'courses': courses,
+        'teachers': teachers,
+        'selected_teacher': selected_teacher
+    })
 
-def add_course(request):
+def course_create(request):
     if request.method == 'POST':
         form = CourseForm(request.POST)
         if form.is_valid():
-            Course.objects.create(
-                name=form.cleaned_data['name'],
-                code=form.cleaned_data['code'],
-                description=form.cleaned_data['description'],
-                credits=form.cleaned_data['credits']
-            )
+            form.save()
             return redirect('course_list')
     else:
         form = CourseForm()
-    return render(request, 'schedule/add_course.html', {'form': form})
+    return render(request, 'schedule/course_form.html', {'form': form, 'title': 'Добавить курс'})
+
+# ====================== STUDENT ======================
+def student_list(request):
+    students = Student.objects.all()
+    return render(request, 'schedule/student_list.html', {'students': students})
+
+def student_create(request):
+    if request.method == 'POST':
+        form = StudentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('student_list')
+    else:
+        form = StudentForm()
+    return render(request, 'schedule/student_form.html', {'form': form, 'title': 'Добавить студента'})
+
+# ====================== ORM ЗАПРОСЫ ======================
+def orm_page(request):
+    context = {
+        'teachers_many': Teacher.objects.annotate(course_count=Count('courses')).filter(course_count__gt=1),
+        'students_no_courses': Student.objects.filter(courses__isnull=True),
+        'teachers_no_info': Teacher.objects.filter(info__isnull=True),
+    }
+    return render(request, 'schedule/orm.html', context)

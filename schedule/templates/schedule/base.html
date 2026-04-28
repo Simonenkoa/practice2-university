@@ -2,24 +2,66 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Учебное расписание{% endblock %}</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background: #007bff; color: white; padding: 15px; text-align: center; }
-        nav a { color: white; margin: 0 15px; text-decoration: none; font-size: 18px; }
-        nav a:hover { text-decoration: underline; }
-        main { padding: 20px; }
-        footer { background: #333; color: white; text-align: center; padding: 10px; margin-top: 30px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #007bff;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        header h1 {
+            margin-bottom: 10px;
+        }
+        nav a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 12px 0;
+            margin-top: auto;
+        }
+        a {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Учебное расписание</h1>
         <nav>
-            <a href="{% url 'teacher_list' %}">Список преподавателей</a>
-            <a href="{% url 'course_list' %}">Список курсов</a>
-            <a href="{% url 'student_list' %}">Список студентов</a>
-            <a href="{% url 'orm_page' %}">ORM-запросы</a>
+            <a href="{% url 'teacher_list' %}">Преподаватели</a>
+    <a href="{% url 'course_list' %}">Курсы</a>
+    <a href="{% url 'student_list' %}">Студенты</a>
+    <a href="{% url 'orm_page' %}">ORM-запросы</a>
         </nav>
     </header>
 
@@ -29,7 +71,7 @@
     </main>
 
     <footer>
-        &copy; 2026 Практическая работа 2
+        © 2026 Методы программирования. Практическая работа 2 — Приложение schedule
     </footer>
 </body>
 </html>

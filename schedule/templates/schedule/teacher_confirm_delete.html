@@ -1,0 +1,14 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Удаление преподавателя{% endblock %}
+
+{% block content %}
+    <h2>Удалить преподавателя?</h2>
+    <p>Вы уверены, что хотите удалить преподавателя <strong>{{ object }}</strong>?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Да, удалить</button>
+    </form>
+    <br>
+    <a href="{% url 'teacher_list' %}">Отмена</a>
+{% endblock %}

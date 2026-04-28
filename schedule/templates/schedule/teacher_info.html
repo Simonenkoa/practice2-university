@@ -1,0 +1,20 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Информация о преподавателе{% endblock %}
+
+{% block content %}
+    <h2>Информация о преподавателе</h2>
+    <p><strong>ФИО:</strong> {{ teacher.first_name }} {{ teacher.last_name }}</p>
+    <p><strong>Email:</strong> {{ teacher.email }}</p>
+    
+    {% if info %}
+        <h3>Дополнительная информация:</h3>
+        <p><strong>Телефон:</strong> {{ info.phone|default:"—" }}</p>
+        <p><strong>Биография:</strong> {{ info.bio|default:"—" }}</p>
+    {% else %}
+        <p><strong>Дополнительная информация не заполнена.</strong></p>
+    {% endif %}
+    
+    <br>
+    <a href="{% url 'teacher_list' %}">← Назад к списку преподавателей</a>
+{% endblock %}

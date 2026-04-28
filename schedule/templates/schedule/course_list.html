@@ -4,11 +4,18 @@
 
 {% block content %}
     <h2>Список курсов</h2>
-    <ul>
-        {% for course in courses %}
-            <li>{{ course.name }} ({{ course.code }}) — {{ course.teacher|default:"— без преподавателя" }}</li>
-        {% empty %}
-            <li>Курсов пока нет.</li>
-        {% endfor %}
-    </ul>
+    <a href="{% url 'course_create' %}">+ Добавить курс</a>
+    <hr>
+    {% if courses %}
+        <ul>
+            {% for course in courses %}
+                <li>
+                    <strong>{{ course.name }}</strong> ({{ course.code }})
+                    — {% if course.teacher %}{{ course.teacher }}{% else %}Без преподавателя{% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Курсов пока нет.</p>
+    {% endif %}
 {% endblock %}

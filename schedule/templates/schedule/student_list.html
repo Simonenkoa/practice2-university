@@ -1,0 +1,26 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}Список студентов{% endblock %}
+
+{% block content %}
+    <h2>Список студентов</h2>
+    <a href="{% url 'student_create' %}">+ Добавить студента</a>
+    <hr>
+
+    {% if students %}
+        <ul>
+            {% for student in students %}
+                <li>
+                    <strong>{{ student.first_name }} {{ student.last_name }}</strong>
+                    — {{ student.email }}
+                    <br>
+                    <small>ID: {{ student.student_id }}</small>
+                    <br>
+                    <a href="{% url 'student_update_courses' student.pk %}">Запись на курсы / Отписка</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Студентов пока нет.</p>
+    {% endif %}
+{% endblock %}

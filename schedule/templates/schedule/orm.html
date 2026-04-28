@@ -1,0 +1,50 @@
+{% extends 'schedule/base.html' %}
+
+{% block title %}ORM-запросы{% endblock %}
+
+{% block content %}
+    <h2>ORM-запросы</h2>
+    <p>Выберите запрос для выполнения:</p>
+
+    <ul>
+        <li><a href="{% url 'orm_page' %}?query=teachers_many">1. Преподаватели, у которых больше 1 курса</a></li>
+        <li><a href="{% url 'orm_page' %}?query=students_no_courses">2. Студенты без курсов</a></li>
+        <li><a href="{% url 'orm_page' %}?query=teachers_no_info">3. Преподаватели без информации (TeacherInfo)</a></li>
+    </ul>
+
+    <hr>
+
+    {% if query == 'teachers_many' %}
+        <h3>Преподаватели, у которых больше 1 курса:</h3>
+        <ul>
+            {% for t in teachers_many %}
+                <li>{{ t }} — {{ t.course_count }} курсов</li>
+            {% empty %}
+                <li>Таких преподавателей нет</li>
+            {% endfor %}
+        </ul>
+
+    {% elif query == 'students_no_courses' %}
+        <h3>Студенты без курсов:</h3>
+        <ul>
+            {% for s in students_no_courses %}
+                <li>{{ s }}</li>
+            {% empty %}
+                <li>Все студенты записаны на курсы</li>
+            {% endfor %}
+        </ul>
+
+    {% elif query == 'teachers_no_info' %}
+        <h3>Преподаватели без информации:</h3>
+        <ul>
+            {% for t in teachers_no_info %}
+                <li>{{ t }}</li>
+            {% empty %}
+                <li>Все преподаватели имеют информацию</li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p>Выберите запрос выше.</p>
+    {% endif %}
+{% endblock %}

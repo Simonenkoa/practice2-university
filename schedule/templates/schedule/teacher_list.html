@@ -6,13 +6,16 @@
     <h2>Список преподавателей</h2>
     <a href="{% url 'teacher_create' %}">+ Добавить преподавателя</a>
     <hr>
+
     {% if teachers %}
         <ul>
             {% for teacher in teachers %}
                 <li>
                     <strong>{{ teacher.first_name }} {{ teacher.last_name }}</strong> — {{ teacher.email }}
+                    {% if teacher.department %} ({{ teacher.department }}) {% endif %}
                     <br>
                     <a href="{% url 'teacher_update' teacher.pk %}">Редактировать</a> |
+                    <a href="{% url 'teacher_info' teacher.pk %}">Информация</a> |
                     <a href="{% url 'teacher_delete' teacher.pk %}">Удалить</a>
                 </li>
             {% endfor %}

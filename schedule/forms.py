@@ -23,11 +23,3 @@ class StudentCourseForm(forms.ModelForm):
         widgets = {
             'courses': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'})
         }
-
-class StudentCourseForm(forms.ModelForm):
-    class Meta:
-        model = Student
-        fields = ['courses']
-        widgets = {
-            'courses': forms.CheckboxSelectMultiple()
-        }

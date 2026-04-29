@@ -3,7 +3,7 @@ from django.db.models import Count
 from .models import Teacher, Course, Student
 from .forms import TeacherForm, CourseForm, StudentForm, StudentCourseForm
 
-# ====================== TEACHER ======================
+# teacher---------------------------------------------------------------------------------------------------------
 def teacher_list(request):
     teachers = Teacher.objects.all()
     return render(request, 'schedule/teacher_list.html', {'teachers': teachers})
@@ -36,7 +36,7 @@ def teacher_delete(request, pk):
         return redirect('teacher_list')
     return render(request, 'schedule/teacher_confirm_delete.html', {'object': teacher, 'type': 'преподавателя'})
 
-# ====================== COURSE ======================
+# course-------------------------------------------------------------------------------------------------------------------
 def course_list(request):
     teachers = Teacher.objects.all()
     selected_teacher = request.GET.get('teacher')
@@ -59,7 +59,7 @@ def course_create(request):
         form = CourseForm()
     return render(request, 'schedule/course_form.html', {'form': form, 'title': 'Добавить курс'})
 
-# ====================== STUDENT ======================
+# student-------------------------------------------------------------------------------------------------------------------
 def student_list(request):
     students = Student.objects.all()
     return render(request, 'schedule/student_list.html', {'students': students})
@@ -74,7 +74,7 @@ def student_create(request):
         form = StudentForm()
     return render(request, 'schedule/student_form.html', {'form': form, 'title': 'Добавить студента'})
 
-# ====================== ORM ЗАПРОСЫ ======================
+# ORM------------------------------------------------------------------------------------------------------------
 def orm_page(request):
     query = request.GET.get('query')
     context = {
@@ -90,7 +90,7 @@ def orm_page(request):
 
     return render(request, 'schedule/orm.html', context)
 
-# ====================== STUDENT + КУРСЫ ======================
+# student и курсы----------------------------------------------------------------------------------------------------------
 def student_update_courses(request, pk):
     student = get_object_or_404(Student, pk=pk)
     if request.method == 'POST':
@@ -106,7 +106,7 @@ def student_update_courses(request, pk):
         'title': f'Запись студента {student} на курсы'
     })
 
-# ====================== TEACHER INFO ======================
+# teacher info-------------------------------------------------------------------------------------------------------------
 def teacher_info(request, pk):
     teacher = get_object_or_404(Teacher, pk=pk)
     try:

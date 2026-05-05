@@ -7,7 +7,7 @@ from schedule.views import (
 )
 
 urlpatterns = [
-    path('', teacher_list, name='home'),                    # Главная — список преподавателей
+    path('', teacher_list, name='home'),
 
     # Teacher
     path('teachers/', teacher_list, name='teacher_list'),

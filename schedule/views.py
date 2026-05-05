@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count
-from .models import Teacher, Course, Student
+from .models import Teacher, Course, Student, TeacherInfo
 from .forms import TeacherForm, CourseForm, StudentForm, StudentCourseForm
 
 # teacher---------------------------------------------------------------------------------------------------------
@@ -12,7 +12,9 @@ def teacher_create(request):
     if request.method == 'POST':
         form = TeacherForm(request.POST)
         if form.is_valid():
-            form.save()
+            teacher = form.save()                    # сначала сохраняем Teacher
+            # Автоматически создаём TeacherInfo
+            TeacherInfo.objects.create(teacher=teacher)
             return redirect('teacher_list')
     else:
         form = TeacherForm()
@@ -107,13 +109,16 @@ def student_update_courses(request, pk):
     })
 
 # teacher info-------------------------------------------------------------------------------------------------------------
-def teacher_info(request, pk):
+def teacher_info(request, pk) :
     teacher = get_object_or_404(Teacher, pk=pk)
-    try:
-        info = teacher.info
-    except TeacherInfo.DoesNotExist:
-        info = None
+
+    info = None
+    try :
+        info = teacher.info  # пытаемся получить связанную информацию
+    except TeacherInfo.DoesNotExist :
+        info = None  # если информации нет — просто None
+
     return render(request, 'schedule/teacher_info.html', {
-        'teacher': teacher,
-        'info': info
+        'teacher' : teacher,
+        'info' : info
     })
